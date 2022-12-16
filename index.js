@@ -11,10 +11,22 @@ let px = 10,
   yv = 0,
   gs = 20,
   tc = 20,
-  ax = 15,
-  ay = 15,
-  tail = 5;
+  ax = Math.floor(Math.random() * tc),
+  ay = Math.floor(Math.random() * tc),
+  tail = 4;
 const trail = [];
+
+const randomColor = () => {
+  return "#" + Math.floor(Math.random() * 16777215).toString(16);
+};
+
+const spawnFood = () => {
+  ax = Math.floor(Math.random() * tc);
+  ay = Math.floor(Math.random() * tc);
+  trail.forEach((v) => {
+    if (v.x === ax && v.y === ay) spawnFood();
+  });
+};
 
 function game() {
   px += xv;
@@ -38,7 +50,7 @@ function game() {
   for (var i = 0; i < trail.length; i++) {
     ctx.fillRect(trail[i].x * gs, trail[i].y * gs, gs - 2, gs - 2);
     if (trail[i].x == px && trail[i].y == py) {
-      tail = 5;
+      tail = 4;
     }
   }
   trail.push({ x: px, y: py });
@@ -48,12 +60,11 @@ function game() {
 
   if (ax == px && ay == py) {
     tail++;
-    ax = Math.floor(Math.random() * tc);
-    ay = Math.floor(Math.random() * tc);
+    spawnFood();
   }
   ctx.fillRect(ax * gs, ay * gs, gs - 2, gs - 2);
 
-  ctx.fillStyle = "yellow";
+  ctx.fillStyle = randomColor();
   ctx.fillRect(ax * gs, ay * gs, gs - 2, gs - 2);
 }
 
